@@ -1,6 +1,9 @@
 <?php
 // products.php
 
+// Site helpers (url/asset/esc/partial)
+require_once __DIR__ . '/core/helpers.php';
+
 /* ====== DB BOOTSTRAP (robust) ====== */
 $pdo = $pdo ?? null;
 
@@ -128,46 +131,53 @@ switch ($sort) {
 
 $wsql = $where ? ("WHERE " . implode(" AND ", $where)) : "";
 
-/* ====== COUNT ====== */
-$countSql = "SELECT COUNT(*) AS cnt
-             FROM products p
-             $wsql";
-$stmt = $pdo->prepare($countSql);
-$stmt->execute($params);
-$total = (int)$stmt->fetchColumn();
-$pages = max(1, (int)ceil($total / $per_page));
+if (!($pdo instanceof PDO)) {
+    // Graceful fallback when DB is unavailable
+    $total = 0;
+    $pages = 1;
+    $rows  = [];
+} else {
+    /* ====== COUNT ====== */
+    $countSql = "SELECT COUNT(*) AS cnt
+                 FROM products p
+                 $wsql";
+    $stmt = $pdo->prepare($countSql);
+    $stmt->execute($params);
+    $total = (int)$stmt->fetchColumn();
+    $pages = max(1, (int)ceil($total / $per_page));
 
-/* ====== DATA: with primary image (fallback to any) ====== */
-$sql = "
-SELECT
-  p.id, p.name, p.slug, p.sku, p.short_desc, p.price, p.sale_price, p.stock, p.updated_at,
-  COALESCE(pim.path, pia.path) AS image_path
-FROM products p
-LEFT JOIN (
-  SELECT product_id, path
-  FROM product_images
-  WHERE is_primary = 1
-  GROUP BY product_id
-) pim ON pim.product_id = p.id
-LEFT JOIN (
-  SELECT pi2.product_id, pi2.path
-  FROM product_images pi2
-  INNER JOIN (
-    SELECT product_id, MIN(id) AS min_id
-    FROM product_images
-    GROUP BY product_id
-  ) x ON x.product_id = pi2.product_id AND x.min_id = pi2.id
-) pia ON pia.product_id = p.id
-$wsql
-ORDER BY $order
-LIMIT :lim OFFSET :off
-";
-$stmt = $pdo->prepare($sql);
-foreach ($params as $k => $v) $stmt->bindValue($k, $v);
-$stmt->bindValue(':lim', $per_page, PDO::PARAM_INT);
-$stmt->bindValue(':off', $offset, PDO::PARAM_INT);
-$stmt->execute();
-$rows = $stmt->fetchAll();
+    /* ====== DATA: with primary image (fallback to any) ====== */
+    $sql = "
+    SELECT
+      p.id, p.name, p.slug, p.sku, p.short_desc, p.price, p.sale_price, p.stock, p.updated_at,
+      COALESCE(pim.path, pia.path) AS image_path
+    FROM products p
+    LEFT JOIN (
+      SELECT product_id, path
+      FROM product_images
+      WHERE is_primary = 1
+      GROUP BY product_id
+    ) pim ON pim.product_id = p.id
+    LEFT JOIN (
+      SELECT pi2.product_id, pi2.path
+      FROM product_images pi2
+      INNER JOIN (
+        SELECT product_id, MIN(id) AS min_id
+        FROM product_images
+        GROUP BY product_id
+      ) x ON x.product_id = pi2.product_id AND x.min_id = pi2.id
+    ) pia ON pia.product_id = p.id
+    $wsql
+    ORDER BY $order
+    LIMIT :lim OFFSET :off
+    ";
+    $stmt = $pdo->prepare($sql);
+    foreach ($params as $k => $v) $stmt->bindValue($k, $v);
+    $stmt->bindValue(':lim', $per_page, PDO::PARAM_INT);
+    $stmt->bindValue(':off', $offset, PDO::PARAM_INT);
+    $stmt->execute();
+    $rows = $stmt->fetchAll();
+}
 
 /* ====== HELPERS ====== */
 function h($s)

@@ -1,7 +1,7 @@
 <?php
 // Learn hub (blog/knowledge base) page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Learn – Smart Home Guides & Insights | iSwift';
 $meta_desc  = 'Explore articles, guides and tutorials on smart home automation, product comparisons, installation tips and more. Stay informed with iSwift’s knowledge hub.';

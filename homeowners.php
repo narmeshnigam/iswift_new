@@ -1,7 +1,7 @@
 <?php
 // Page tailored for homeowners
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Smart Home Solutions for Homeowners – iSwift';
 $meta_desc  = 'Discover how iSwift simplifies life for homeowners in Delhi NCR with smart lighting, security, climate control and more. Achieve peace of mind and comfort with our solutions.';

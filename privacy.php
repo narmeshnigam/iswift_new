@@ -1,7 +1,7 @@
 <?php
 // Privacy Policy page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Privacy Policy – iSwift';
 $meta_desc  = 'Learn how iSwift collects, uses and protects your personal information when you visit our website or use our smart home services.';

@@ -1,7 +1,7 @@
 <?php
 // Warranty & Support page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Warranty & Support – iSwift';
 $meta_desc  = 'Learn about iSwift’s warranty coverage and support services for our smart home products and installations.';

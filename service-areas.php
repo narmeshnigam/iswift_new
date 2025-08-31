@@ -1,7 +1,7 @@
 <?php
 // Landing page for installation & service areas
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Installation & Service Areas – iSwift';
 $meta_desc  = 'iSwift provides smart home installation and support across Delhi NCR including Delhi, Noida, Gurugram, Ghaziabad, Faridabad and Greater Noida.';

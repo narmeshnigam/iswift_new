@@ -1,7 +1,7 @@
 <?php
 // Individual service area page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $slug = $_GET['slug'] ?? '';
 

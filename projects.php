@@ -1,7 +1,7 @@
 <?php
 // Projects listing page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Projects – iSwift';
 $meta_desc  = 'Browse selected smart home projects completed by the iSwift team across Delhi NCR. See how we bring automation to apartments, villas and offices.';

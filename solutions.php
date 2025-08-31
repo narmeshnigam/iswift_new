@@ -1,7 +1,7 @@
 <?php
 // Solutions landing page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 // Page metadata
 $meta_title = 'Smart Home Solutions – iSwift';

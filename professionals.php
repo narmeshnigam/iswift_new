@@ -1,7 +1,7 @@
 <?php
 // Page for architects, interior designers and builders
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Partnerships for Professionals – iSwift';
 $meta_desc  = 'Collaborate with iSwift and deliver cutting‑edge smart home solutions to your clients. Learn about our partnership program for architects, interior designers and builders in Delhi NCR.';

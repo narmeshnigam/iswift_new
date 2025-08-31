@@ -1,6 +1,9 @@
 <?php
 // product-details.php
 
+// Site helpers (url/asset/esc/partial)
+require_once __DIR__ . '/core/helpers.php';
+
 /* ====== DB BOOTSTRAP (same robust block you okayed) ====== */
 $pdo = $pdo ?? null;
 
@@ -25,9 +28,8 @@ if (!($pdo instanceof PDO)) {
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
       ]);
     } catch (Throwable $e) {
-      http_response_code(500);
-      echo "DB connection failed.";
-      exit;
+      // Graceful: leave PDO null for sample rendering without DB
+      $pdo = null;
     }
   }
 }
@@ -55,10 +57,9 @@ function img_url($path)
 
 /* ====== INPUT ====== */
 $slug = trim($_GET['slug'] ?? '');
+$useSample = false;
 if ($slug === '') {
-  http_response_code(400);
-  echo "Missing product slug.";
-  exit;
+  $useSample = true;
 }
 
 /* ====== FETCH PRODUCT ====== */

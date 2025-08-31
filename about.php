@@ -1,7 +1,7 @@
 <?php
 // About Us page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'About iSwift – Our Story & Vision';
 $meta_desc  = 'Learn about iSwift’s mission to simplify smart home automation in Delhi NCR, our team of experts and our commitment to quality and service.';

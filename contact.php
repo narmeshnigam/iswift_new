@@ -1,7 +1,7 @@
 <?php
 // Contact page with address, phone, and a contact form
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Contact Us – iSwift';
 $meta_desc  = 'Reach out to iSwift for smart home consultations, support and general enquiries. We serve homeowners and professionals across Delhi NCR.';

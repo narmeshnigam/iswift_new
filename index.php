@@ -1,7 +1,7 @@
 <?php
 // Home page for iSwift website
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 // Set page metadata
 $meta_title = 'iSwift – Smart Home Automation Simplified';

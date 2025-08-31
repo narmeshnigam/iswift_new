@@ -1,7 +1,7 @@
 <?php
 // Pricing / quotations page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Pricing & Quotes – iSwift';
 $meta_desc  = 'Explore indicative pricing for iSwift smart home solutions in Delhi NCR. Contact us for personalised quotations based on your requirements.';

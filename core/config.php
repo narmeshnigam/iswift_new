@@ -13,10 +13,15 @@
 $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
 $isLocal = in_array($host, ['localhost', '127.0.0.1'], true);
 
-// Base URL.  When serving from a subfolder (e.g. /iswift/) locally,
-// update this path.  In production it should be '/'.
+// Compute base path dynamically from the executing script so local subfolders work.
+// Examples:
+//  - http://localhost/iswift_new/index.php => BASE_URL '/iswift_new/'
+//  - https://example.com/index.php         => BASE_URL '/'
 if (!defined('BASE_URL')) {
-    define('BASE_URL', $isLocal ? '/iswift/' : '/');
+    $script = $_SERVER['SCRIPT_NAME'] ?? '/';
+    $basePath = rtrim(str_replace('\\', '/', dirname($script)), '/');
+    $basePath = $basePath === '' ? '/' : ($basePath . '/');
+    define('BASE_URL', $basePath);
 }
 
 // Database connection parameters

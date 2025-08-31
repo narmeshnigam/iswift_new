@@ -82,7 +82,8 @@ partial('header', compact('meta_title', 'meta_desc', 'current_page'));
                     echo '<div style="display:flex; gap:0.5rem; margin-top:0.5rem;">';
                     foreach ($images as $img) {
                         $thumb = url('uploads/products/' . ltrim($img['path'], '/'));
-                        echo '<img src="' . esc($thumb) . '" alt="" style="width:60px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer;" onclick="this.parentNode.parentNode.querySelector('img:first-child').src=this.src;">';
+                        // Escape quotes correctly inside the onclick handler
+                        echo '<img src="' . esc($thumb) . '" alt="" style="width:60px; height:60px; object-fit:cover; border-radius:4px; cursor:pointer;" onclick="this.parentNode.parentNode.querySelector(\'img:first-child\').src=this.src;">';
                     }
                     echo '</div>';
                 }

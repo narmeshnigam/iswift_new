@@ -1,7 +1,7 @@
 <?php
 // Terms of Use page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Terms of Use – iSwift';
 $meta_desc  = 'Review the terms and conditions for using the iSwift website and services.';

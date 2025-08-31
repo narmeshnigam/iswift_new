@@ -9,8 +9,9 @@ require_once __DIR__ . '/../core/db.php';
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 
-// Prepare redirect base URL for admin area
-$adminBase = BASE_URL . 'admin/';
+// Prepare redirect base URL for admin area (works regardless of BASE_URL)
+// For /admin/login.php this resolves to '/admin/'
+$adminBase = rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/admin/login.php'), '/') . '/';
 
 try {
     $pdo = db();

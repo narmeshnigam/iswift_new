@@ -1,7 +1,7 @@
 <?php
 // Testimonials page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'Client Testimonials – iSwift';
 $meta_desc  = 'See what our clients in Delhi NCR say about their experience with iSwift’s smart home installations.';

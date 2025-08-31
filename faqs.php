@@ -1,7 +1,7 @@
 <?php
 // Frequently Asked Questions page
 
-require_once __DIR__ . '/../core/helpers.php';
+require_once __DIR__ . '/core/helpers.php';
 
 $meta_title = 'FAQs – iSwift';
 $meta_desc  = 'Find answers to common questions about iSwift smart home automation products and services.';
