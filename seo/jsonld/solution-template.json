@@ -1,0 +1,27 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "{Solution Title}",
+  "provider": {
+    "@id": "https://iswift.in/#organization"
+  },
+  "serviceType": "{Solution Title}",
+  "description": "{Solution description}",
+  "areaServed": {
+    "@type": "AdministrativeArea",
+    "name": "Delhi NCR"
+  },
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "{Solution Title} Packages",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Product",
+          "name": "{Component or Package Name}"
+        }
+      }
+    ]
+  }
+}

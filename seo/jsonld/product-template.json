@@ -1,0 +1,28 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "{Product Name}",
+  "image": [
+    "{Image URL 1}",
+    "{Image URL 2}"
+  ],
+  "description": "{Short description of product}",
+  "sku": "{SKU}",
+  "brand": {
+    "@type": "Brand",
+    "name": "iSwift"
+  },
+  "offers": {
+    "@type": "Offer",
+    "priceCurrency": "INR",
+    "price": "{Price}",
+    "availability": "https://schema.org/InStock",
+    "url": "https://iswift.in/product/{slug}",
+    "itemCondition": "https://schema.org/NewCondition"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.7",
+    "reviewCount": "15"
+  }
+}

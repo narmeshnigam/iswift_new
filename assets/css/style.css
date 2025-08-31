@@ -1,0 +1,258 @@
+/*
+ * Global styles for the iSwift website.
+ *
+ * This stylesheet defines a modern, responsive design inspired by the
+ * approved mock‑ups (light backgrounds with accent colours).  It uses
+ * CSS variables for colour palette so that branding can be easily
+ * adjusted.  Components such as the header, navigation, buttons and
+ * footer are styled here.
+ */
+
+/* Colour palette */
+:root {
+    --color-primary: #f4c531;   /* golden yellow (calls to action) */
+    --color-secondary: #e8f6f8; /* pale blue background */
+    --color-accent: #175ca2;    /* dark blue for headings and links */
+    --color-text: #333333;      /* main text colour */
+    --color-muted: #777777;     /* muted text */
+    --color-light: #ffffff;     /* white */
+    --font-family-base: 'Inter', sans-serif;
+}
+
+/* Reset & base styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--font-family-base);
+    color: var(--color-text);
+    background: var(--color-secondary);
+    line-height: 1.6;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-accent);
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* Container */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* Header */
+.site-header {
+    background: var(--color-light);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+.site-header .container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+}
+.site-header .logo img {
+    height: 48px;
+    width: auto;
+}
+.main-nav .nav-list {
+    list-style: none;
+    display: flex;
+    gap: 1.5rem;
+}
+
+/* Mobile navigation toggle (hidden by default) */
+.nav-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.main-nav a {
+    font-weight: 500;
+    padding: 0.25rem 0;
+}
+.main-nav a.active,
+.main-nav a:hover {
+    color: var(--color-primary);
+    border-bottom: 2px solid var(--color-primary);
+}
+.header-ctas .btn {
+    margin-left: 1rem;
+}
+
+/* Buttons */
+.btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+}
+.btn-primary {
+    background: var(--color-primary);
+    color: var(--color-light);
+}
+/* Slightly darker shade on hover. */
+.btn-primary:hover {
+    background: #e4b829;
+}
+.btn-secondary {
+    background: var(--color-accent);
+    color: var(--color-light);
+}
+/* Slightly darker shade on hover. */
+.btn-secondary:hover {
+    background: #0f4c8c;
+}
+
+/* Footer */
+.site-footer {
+    background: var(--color-light);
+    color: var(--color-text);
+    border-top: 1px solid #eaeaea;
+    margin-top: 4rem;
+    padding-top: 2rem;
+}
+.footer-cta {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.footer-cta-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.footer-cta-text {
+    color: var(--color-muted);
+    margin-bottom: 1rem;
+}
+.footer-cta-actions .btn {
+    margin: 0.25rem;
+}
+.footer-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+.footer-col {
+    flex: 1 1 250px;
+}
+.footer-head {
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.footer-links li {
+    margin-bottom: 0.5rem;
+}
+.footer-links a {
+    color: var(--color-accent);
+}
+.footer-links a:hover {
+    color: var(--color-primary);
+}
+.footer-social a {
+    margin-right: 0.5rem;
+}
+.footer-bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #eaeaea;
+    padding-top: 1rem;
+    font-size: 0.875rem;
+}
+.footer-legal a {
+    color: var(--color-accent);
+    margin: 0 0.25rem;
+}
+.footer-legal a:hover {
+    color: var(--color-primary);
+}
+
+/* Hero section */
+.hero {
+    background: linear-gradient(135deg, #fffdf5 0%, #f6faff 100%);
+    text-align: center;
+    padding: 4rem 1rem;
+}
+.hero h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+.hero p {
+    max-width: 600px;
+    margin: 0 auto 2rem auto;
+    color: var(--color-muted);
+    font-size: 1.125rem;
+}
+.hero .cta-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+.hero .cta-buttons .btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    /* Show mobile toggle and hide nav list by default */
+    .nav-toggle {
+        display: block;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        margin-right: 1rem;
+    }
+    .main-nav .nav-list {
+        display: none;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 0.5rem;
+    }
+    .main-nav .nav-list.open {
+        display: flex;
+    }
+    .header-ctas {
+        margin-left: 0;
+    }
+    .footer-grid {
+        flex-direction: column;
+    }
+    .site-header .container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

@@ -1,0 +1,621 @@
+:root{
+  /* Numerology-aligned tokens (Jupiter + Mercury) */
+  --green:#2FBF71;        /* primary */
+  --green-200:#6EE7A8;
+  --yellow:#FFD54F;       /* primary alt */
+  --saffron:#F4B400;      /* secondary */
+  --sky:#64B5F6;          /* secondary */
+  --surface:#FCFCF8;      /* cards */
+  --text:#1F2937;         /* deep charcoal */
+  --muted:#374151;        /* secondary text */
+  --border:#E5E7EB;       /* lines */
+  --bg-start:#FFF6E0;     /* page bg gradient */
+  --bg-end:#F0FFF4;
+  --shadow:0 10px 30px rgba(0,0,0,.06);
+  --radius-lg:16px;
+  --radius-md:12px;
+}
+
+/* === Sidebar push behavior: desktop fix === */
+:root{
+  /* ensure this exists; match your current sidebar width */
+  --sidebar-w: 280px;
+}
+
+
+body.login-page{
+  margin:0;
+  font-family:'Inter',system-ui,-apple-system,Segoe UI,Roboto,'Helvetica Neue',Arial,'Noto Sans','Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol';
+  color:var(--text);
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(255,213,79,.12), transparent),
+    radial-gradient(1200px 400px at 110% 110%, rgba(47,191,113,.12), transparent),
+    linear-gradient(90deg, var(--bg-start), var(--bg-end));
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+}
+
+.login-page .auth-container{
+  width:min(92vw, 440px);
+  padding:24px 0;
+}
+
+.login-page .auth-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);
+  padding:28px;
+}
+
+@media (max-width:420px){
+  .login-page .auth-card{ padding:22px; }
+}
+
+.login-page .auth-header{
+  text-align:center;
+  margin-bottom:18px;
+}
+
+.login-page .logo{
+  display:block;
+  width:auto;
+  height:56px;
+  margin:0 auto 10px;
+  object-fit:contain;
+}
+
+.login-page .title{
+  font-size:22px;
+  font-weight:800;
+  margin:0 0 6px 0;
+}
+
+.login-page .subtitle{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.login-page .auth-form{
+  margin-top:16px;
+  display:grid;
+  gap:14px;
+}
+
+.login-page .form-group{
+  display:grid;
+  gap:8px;
+}
+
+.login-page label{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+}
+
+.login-page input[type="email"],
+.login-page input[type="password"]{
+  height:44px;
+  padding:0 12px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:#fff;
+  color:var(--text);
+  outline:none;
+  transition: box-shadow .2s ease, border-color .2s ease, transform .02s ease;
+}
+
+.login-page input::placeholder{ color:#9CA3AF; }
+
+.login-page input:focus{
+  border-color: rgba(47,191,113,.55);
+  box-shadow: 0 0 0 4px rgba(47,191,113,.15);
+}
+
+.login-page .btn{
+  height:44px;
+  border:0;
+  border-radius:var(--radius-md);
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+  color:#fff;
+  background: linear-gradient(135deg, var(--green), var(--green-200));
+  box-shadow: 0 12px 20px rgba(47,191,113,.18);
+  transition: transform .02s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.login-page .btn:hover{
+  filter: brightness(1.3);
+  box-shadow: 0 16px 26px rgba(47,191,113,.22);
+}
+
+.login-page .btn:active{ transform: translateY(1px); }
+.login-page .btn:disabled{ opacity:.6; cursor:not-allowed; box-shadow:none; }
+
+@media (prefers-reduced-motion: reduce){
+  .login-page *{ transition:none !important; }
+}
+
+/* === Admin: Logout page === */
+.logout-page{
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(255,213,79,.12), transparent),
+    radial-gradient(1200px 400px at 110% 110%, rgba(47,191,113,.12), transparent),
+    linear-gradient(90deg, var(--bg-start), var(--bg-end));
+}
+
+.logout-page .logout-card{
+  text-align:center;
+  padding:26px;
+}
+
+.logout-page .logout-title{
+  margin:0 0 8px 0;
+  font-size:20px;
+  font-weight:800;
+}
+
+.logout-page .logout-sub{
+  margin:0;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.logout-page .logout-sub a{
+  color:var(--green);
+  font-weight:600;
+  text-decoration:none;
+  border-bottom:1px dashed rgba(47,191,113,.4);
+}
+
+.logout-page .logout-sub a:hover{
+  filter:brightness(1.08);
+}
+
+/* === Admin: Change Password page === */
+.change-password-page{
+  min-height:100svh;
+  margin:0;
+  font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(255,213,79,.12), transparent),
+    radial-gradient(1200px 400px at 110% 110%, rgba(47,191,113,.12), transparent),
+    linear-gradient(90deg, var(--bg-start), var(--bg-end));
+  display:grid;
+  place-items:center;
+}
+
+.change-password-page .settings-container{
+  width:min(92vw, 560px);
+  padding:28px 0;
+}
+
+.change-password-page .settings-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--shadow);
+  padding:28px;
+}
+
+@media (max-width:520px){
+  .change-password-page .settings-card{ padding:22px; }
+}
+
+.change-password-page .settings-header{
+  margin-bottom:16px;
+}
+
+.change-password-page .settings-title{
+  margin:0 0 6px 0;
+  font-size:22px;
+  font-weight:800;
+}
+
+.change-password-page .settings-subtitle{
+  margin:0;
+  font-size:14px;
+  color:var(--muted);
+}
+
+.change-password-page .form-grid{
+  display:grid;
+  gap:14px;
+  margin-top:14px;
+}
+
+.change-password-page .form-group{
+  display:grid;
+  gap:8px;
+}
+
+.change-password-page label{
+  font-size:13px;
+  font-weight:600;
+  color:var(--muted);
+}
+
+.change-password-page input[type="password"]{
+  height:44px;
+  padding:0 12px;
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  background:#fff;
+  color:var(--text);
+  outline:none;
+  transition: box-shadow .2s ease, border-color .2s ease, transform .02s ease;
+}
+
+.change-password-page input::placeholder{ color:#9CA3AF; }
+
+.change-password-page input:focus{
+  border-color: rgba(47,191,113,.55);
+  box-shadow: 0 0 0 4px rgba(47,191,113,.15);
+}
+
+.change-password-page .btn.primary{
+  height:44px;
+  border:0;
+  border-radius:var(--radius-md);
+  font-weight:700;
+  letter-spacing:.2px;
+  cursor:pointer;
+  color:#fff;
+  background: linear-gradient(135deg, var(--green), var(--green-200));
+  box-shadow: 0 12px 20px rgba(47,191,113,.18);
+  transition: transform .02s ease, box-shadow .2s ease, filter .2s ease;
+}
+
+.change-password-page .btn.primary:hover{
+  filter: brightness(1.03);
+  box-shadow: 0 16px 26px rgba(47,191,113,.22);
+}
+
+.change-password-page .btn.primary:active{
+  transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .change-password-page *{ transition:none !important; }
+}
+
+/* === Admin: Sidebar Navigation (revamp) === */
+:root{
+  --sidebar-w: 260px;
+}
+
+.sidebar-toggle{
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1100;
+  height: 42px;
+  width: 42px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--green), var(--green-200));
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  box-shadow: 0 10px 18px rgba(47,191,113,.18);
+  transition: filter .2s ease, transform .02s ease, box-shadow .2s ease;
+}
+.sidebar-toggle:hover{ filter: brightness(1.08); box-shadow: 0 14px 22px rgba(47,191,113,.22); }
+.sidebar-toggle:active{ transform: translateY(1px); }
+
+/* Sidebar panel (overlay by default; JS toggles .open) */
+.sidebar{
+  position: fixed;
+  inset: 0 auto 0 0;
+  width: var(--sidebar-w);
+  height: 100svh;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+  transform: translateX(-100%);
+  transition: transform .25s ease;
+  z-index: 1090;
+}
+.sidebar.open{ transform: translateX(0); }
+
+/* Top section */
+.sidebar .sidebar-top{ display: grid; gap: 10px; }
+
+.sidebar .logo{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px 14px 8px;
+  border-bottom: 1px solid var(--border);
+}
+.sidebar .logo img{
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Links */
+.sidebar .sidebar-nav{
+  display: grid;
+  gap: 6px;
+  padding: 8px 4px 4px 4px;
+}
+.sidebar .sidebar-nav a{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: var(--text);
+  border: 1px solid transparent;
+  background: transparent;
+  transition: background .15s ease, border-color .15s ease, transform .02s ease, box-shadow .2s ease;
+}
+.sidebar .sidebar-nav a:hover{
+  background: #fff;
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+/* Logout block */
+.sidebar .logout{
+  padding: 10px 6px 4px 6px;
+  border-top: 1px solid var(--border);
+}
+.sidebar .logout a{
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: #8a1a1a;
+  background: linear-gradient(180deg, rgba(255,213,79,.08), rgba(47,191,113,.06));
+  border: 1px solid rgba(244,180,0,.25);
+  transition: background .15s ease, box-shadow .2s ease, transform .02s ease;
+}
+.sidebar .logout a:hover{
+  background: linear-gradient(180deg, rgba(255,213,79,.12), rgba(47,191,113,.09));
+  box-shadow: 0 8px 18px rgba(244,180,0,.12);
+}
+
+/* Larger screens: optional always-visible toggle style */
+@media (min-width: 1024px){
+  .sidebar-toggle{
+    /* Keep button available; remove if you prefer always-open via JS */
+  }
+}
+
+/* Utility: if you later add an 'active' class on current link */
+.sidebar .sidebar-nav a.active{
+  background: linear-gradient(135deg, rgba(47,191,113,.10), rgba(110,231,168,.10));
+  border-color: rgba(47,191,113,.35);
+  color: #146c43;
+  box-shadow: 0 8px 18px rgba(47,191,113,.12);
+}
+
+/* === Global: Sidebar push layout & polish === */
+
+/* Ensure a sane default width variable */
+:root{
+  --sidebar-w: 280px; /* adjust if your current CSS uses another width */
+}
+
+/* Base layout for pages using the sidebar */
+.sidebar-layout{
+  min-height: 100svh;
+  display: grid;
+  grid-template-columns: 1fr; /* mobile: overlay sidebar, content full width */
+}
+
+/* Main content wrapper (use this class on pages' main area) */
+.sidebar-layout .main-content{
+  padding: 20px;
+  transition: margin-left .25s ease, padding .2s ease;
+}
+
+/* Desktop behavior: dock the sidebar and push content when open */
+@media (min-width: 1024px){
+  /* Sidebar is fixed; content gets left margin only when body has .sidebar-open */
+  .sidebar{
+    left: 0;
+    transform: translateX(-100%); /* hidden by default on desktop */
+  }
+  .sidebar.open{
+    transform: translateX(0);
+  }
+
+  /* Push content when sidebar is open */
+  body.sidebar-open .sidebar-layout .main-content{
+    margin-left: var(--sidebar-w);
+  }
+
+  /* Keep toggle visible on desktop, but you can hide it if you want */
+  .sidebar-toggle{
+    position: fixed;
+    left: 16px;
+  }
+}
+
+/* Mobile behavior remains overlay (no push); your existing .sidebar styles handle this */
+@media (max-width: 1023.98px){
+  /* when sidebar open on mobile, body overflow handled in JS */
+  body.sidebar-open .sidebar-layout .main-content{
+    /* no margin-left on mobile; overlay mode */
+    margin-left: 0;
+  }
+}
+
+/* Subtle improvements */
+.sidebar .logo img{
+  max-width: 160px;
+  height: auto;
+  display: block;
+  margin: 14px auto 8px;
+}
+
+.sidebar .sidebar-nav a{
+  line-height: 1.1;
+}
+
+.sidebar .sidebar-nav a.active{
+  font-weight: 700;
+}
+
+.sidebar .sidebar-nav a:focus-visible{
+  outline: 3px solid rgba(47,191,113,.35);
+  outline-offset: 2px;
+  border-radius: 10px;
+}
+
+/* Smooth page titles/cards in content */
+.sidebar-layout h1, .sidebar-layout h2{
+  margin-top: 0;
+}
+
+/* smooth shift for content */
+.sidebar-layout .main-content{
+  transition: margin-left .25s ease;
+}
+
+/* On desktop, push content when sidebar is open.
+   Works in BOTH cases:
+   1) if JS toggles body.sidebar-open
+   2) if sidebar gets .open (sibling-combinator fallback) */
+@media (min-width: 1024px){
+  body.sidebar-open .sidebar-layout .main-content,
+  .sidebar-layout .sidebar.open ~ .main-content{
+    margin-left: var(--sidebar-w);
+  }
+
+  /* make sure the sidebar itself animates in/out on desktop */
+  .sidebar{
+    transform: translateX(-100%);
+    transition: transform .25s ease;
+  }
+  .sidebar.open{
+    transform: translateX(0);
+  }
+}
+
+/* === Admin: Dashboard page === */
+.dashboard-page{
+  color: var(--text);
+  background:
+    radial-gradient(1200px 400px at 10% -10%, rgba(255,213,79,.10), transparent),
+    radial-gradient(1200px 400px at 110% 110%, rgba(47,191,113,.10), transparent),
+    linear-gradient(90deg, var(--bg-start), var(--bg-end));
+}
+
+.dashboard-page .dashboard-content{
+  padding: 24px;
+  transition: margin-left .25s ease, padding .2s ease;
+}
+
+@media (min-width: 640px){
+  .dashboard-page .dashboard-content{ padding: 28px; }
+}
+
+.dashboard-page .page-head h1{
+  margin: 0 0 6px 0;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.dashboard-page .page-head .sub{
+  margin: 0 0 18px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* KPI Cards */
+.dashboard-page .kpi-grid{
+  display: grid;
+  gap: 14px;
+  margin: 8px 0 18px 0;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 680px){
+  .dashboard-page .kpi-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+
+.dashboard-page .card{
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.dashboard-page .card.kpi h4{
+  margin: 0;
+  font-size: 12px;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.dashboard-page .card.kpi .value{
+  margin-top: 6px;
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 1.1;
+}
+
+/* Quick actions */
+.dashboard-page .quick-actions{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.dashboard-page .qa-btn{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  padding: 0 14px;
+  font-weight: 700;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  color: #fff;
+  background: linear-gradient(135deg, var(--green), var(--green-200));
+  box-shadow: 0 10px 18px rgba(47,191,113,.18);
+  border: 1px solid transparent;
+  transition: filter .2s ease, box-shadow .2s ease, transform .02s ease;
+}
+.dashboard-page .qa-btn:hover{
+  filter: brightness(1.06);
+  box-shadow: 0 14px 22px rgba(47,191,113,.22);
+}
+.dashboard-page .qa-btn:active{ transform: translateY(1px); }
+
+.dashboard-page .qa-btn.ghost{
+  color: var(--text);
+  background: #fff;
+  border-color: var(--border);
+  box-shadow: none;
+}
+
+/* Ensure push layout when sidebar is open on desktop (uses the global rule you added) */
+@media (min-width: 1024px){
+  body.sidebar-open .sidebar-layout .dashboard-content{
+    margin-left: var(--sidebar-w);
+  }
+}
+

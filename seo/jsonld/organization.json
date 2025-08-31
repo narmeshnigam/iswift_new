@@ -1,0 +1,30 @@
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "iSwift",
+  "url": "https://iswift.in/",
+  "logo": "https://iswift.in/assets/images/iSwift_logo.png",
+  "description": "iSwift is a luxury smart home automation brand based in Delhi NCR offering solutions for lighting, security, climate control, networking and entertainment.",
+  "contactPoint": [
+    {
+      "@type": "ContactPoint",
+      "telephone": "+91-96546-40101",
+      "contactType": "customer service",
+      "areaServed": "IN",
+      "availableLanguage": ["English", "Hindi"]
+    }
+  ],
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "1605, S-3, Cloud 9 Towers, Vaishali",
+    "addressLocality": "Ghaziabad",
+    "addressRegion": "Uttar Pradesh",
+    "postalCode": "201009",
+    "addressCountry": "IN"
+  },
+  "sameAs": [
+    "https://www.facebook.com/Secureindia8/",
+    "https://www.instagram.com/secureindia.smarthome/",
+    "https://www.youtube.com/@smarthomeautomations"
+  ]
+}

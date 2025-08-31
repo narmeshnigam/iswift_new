@@ -1,0 +1,5 @@
+"Source","Target","Reason"
+"/products.php","/products","Remove .php extension and adopt clean URL"
+"/product-details.php?slug={slug}","/product/{slug}","Use SEO‑friendly slug pattern"
+"/solutions.php","/solutions","Move to new solutions landing page"
+"/projects.php","/projects","Move to new projects page"

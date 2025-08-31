@@ -1,0 +1,25 @@
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "iSwift – Smart Home Automation Simplified",
+  "url": "https://iswift.in/",
+  "description": "Discover luxury smart home automation solutions for Delhi NCR homeowners and professionals. Book a free demo with iSwift today.",
+  "inLanguage": "en",
+  "publisher": {
+    "@id": "https://iswift.in/#organization"
+  },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://iswift.in/"
+      }
+    ]
+  },
+  "about": {
+    "@id": "https://iswift.in/#organization"
+  }
+}
