@@ -2,7 +2,7 @@
 session_start();
 include_once 'includes/config.php';
 if (!isset($_SESSION['user_id'])) {
-  header("Location: {$BASE_URL}login.php");
+  header("Location: {$BASE_URL}index.php");
   exit();
 }
 ?>
@@ -14,7 +14,7 @@ if (!isset($_SESSION['user_id'])) {
   <title>Change Password – iSwift Website Admin</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= $BASE_URL ?>admin/assets/style.css">
+  <link rel="stylesheet" href="<?= $BASE_URL ?>assets/style.css">
 </head>
 <body class="sidebar-layout">
 
@@ -37,6 +37,6 @@ if (!isset($_SESSION['user_id'])) {
   </form>
 </div>
 
-<script src="<?= $BASE_URL ?>admin/assets/nav.js"></script>
+<script src="<?= $BASE_URL ?>assets/nav.js"></script>
 </body>
 </html>

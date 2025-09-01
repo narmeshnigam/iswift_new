@@ -15,27 +15,27 @@ function is_active(string $file, string $current): string {
 <aside class="sidebar" id="sidebar" role="navigation" aria-label="Admin sidebar">
   <div>
     <div class="logo">
-      <a href="<?= $BASE_URL ?>admin/dashboard.php" aria-label="iSwift Admin Home">
-        <img src="<?= $BASE_URL ?>admin/assets/iSwift_logo.png" alt="iSwift Logo">
+      <a href="<?= $BASE_URL ?>dashboard.php" aria-label="iSwift Admin Home">
+        <img src="<?= $BASE_URL ?>assets/iSwift_logo.png" alt="iSwift Logo">
       </a>
     </div>
 
     <nav class="sidebar-nav">
-      <a href="<?= $BASE_URL ?>admin/dashboard.php"
+      <a href="<?= $BASE_URL ?>dashboard.php"
          class="<?= is_active('dashboard.php', $current) ?>">Dashboard</a>
 
-      <a href="<?= $BASE_URL ?>admin/products/list.php"
+      <a href="<?= $BASE_URL ?>products/list.php"
          class="<?= is_active('list.php', $current) ?>">Products</a>
 
-      <a href="<?= $BASE_URL ?>admin/products/add.php"
+      <a href="<?= $BASE_URL ?>products/add.php"
          class="<?= is_active('add.php', $current) ?>">Add Product</a>
 
-      <a href="<?= $BASE_URL ?>admin/change_password.php"
+      <a href="<?= $BASE_URL ?>change_password.php"
          class="<?= is_active('change_password.php', $current) ?>">Change Password</a>
     </nav>
   </div>
 
   <div class="logout">
-    <a href="<?= $BASE_URL ?>admin/logout.php">Log out</a>
+    <a href="<?= $BASE_URL ?>logout.php">Log out</a>
   </div>
 </aside>

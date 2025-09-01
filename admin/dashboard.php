@@ -2,7 +2,7 @@
 session_start();
 include_once 'includes/config.php';
 if (!isset($_SESSION['user_id'])) {
-  header("Location: {$BASE_URL}login.php");
+  header("Location: {$BASE_URL}index.php");
   exit();
 }
 ?>
@@ -13,7 +13,7 @@ if (!isset($_SESSION['user_id'])) {
   <title>Dashboard – iSwift ERP</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= $BASE_URL ?>admin/assets/style.css">
+  <link rel="stylesheet" href="<?= $BASE_URL ?>assets/style.css">
 </head>
 <body class="sidebar-layout dashboard-page">
   <?php include __DIR__ . '/includes/nav.php'; ?>
@@ -42,12 +42,12 @@ if (!isset($_SESSION['user_id'])) {
 
     <!-- Quick links (static) -->
     <section class="quick-actions" aria-label="Quick actions">
-      <a class="qa-btn" href="<?= $BASE_URL ?>admin/products/list.php">Manage Products</a>
-      <a class="qa-btn ghost" href="<?= $BASE_URL ?>admin/products/add.php">Add New Product</a>
-      <a class="qa-btn ghost" href="<?= $BASE_URL ?>admin/change_password.php">Change Password</a>
+      <a class="qa-btn" href="<?= $BASE_URL ?>products/list.php">Manage Products</a>
+      <a class="qa-btn ghost" href="<?= $BASE_URL ?>products/add.php">Add New Product</a>
+      <a class="qa-btn ghost" href="<?= $BASE_URL ?>change_password.php">Change Password</a>
     </section>
   </main>
 
-  <script src="<?= $BASE_URL ?>admin/assets/nav.js"></script>
+  <script src="<?= $BASE_URL ?>assets/nav.js"></script>
 </body>
 </html>
