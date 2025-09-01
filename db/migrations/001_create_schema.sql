@@ -181,8 +181,62 @@ SELECT p.id, f.feature, f.sort_order FROM (
 ) f
 JOIN products p ON p.slug = 'sample-smart-lock';
 
+-- Contact messages (submissions from contact.php)
+CREATE TABLE IF NOT EXISTS contact_messages (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  email VARCHAR(150) NOT NULL,
+  phone VARCHAR(50) DEFAULT NULL,
+  subject VARCHAR(200) DEFAULT NULL,
+  message TEXT NOT NULL,
+  source_page VARCHAR(150) DEFAULT 'contact.php',
+  referer VARCHAR(255) DEFAULT NULL,
+  user_agent VARCHAR(255) DEFAULT NULL,
+  ip_address VARCHAR(45) DEFAULT NULL,
+  status ENUM('new','read','archived') NOT NULL DEFAULT 'new',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  responded_at DATETIME DEFAULT NULL
+);
+
+-- Seed example message (for testing UI/integrations)
+INSERT INTO contact_messages (name, email, phone, subject, message, source_page, referer, user_agent, ip_address, status)
+VALUES (
+  'John Tester',
+  'john@example.com',
+  '+91 90000 00000',
+  'Interested in smart locks',
+  'Hi team, I would like a demo of your Sample Smart Lock. Please call me back.',
+  'contact.php',
+  NULL,
+  'Seeder/1.0',
+  '127.0.0.1',
+  'new'
+)
+ON DUPLICATE KEY UPDATE name = VALUES(name);
+
 INSERT INTO product_faqs (product_id, question, answer, sort_order)
 SELECT p.id, q.question, q.answer, q.sort_order FROM (
   SELECT 'Does it work offline?' AS question, 'Yes, PIN and key access continue to work.' AS answer, 1 AS sort_order
 ) q
 JOIN products p ON p.slug = 'sample-smart-lock';
+
+-- Demo bookings (submissions from book-demo.php)
+CREATE TABLE IF NOT EXISTS demo_bookings (
+  id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(150) NOT NULL,
+  phone VARCHAR(50) NOT NULL,
+  city VARCHAR(100) NOT NULL,
+  project_type ENUM('home','office','other') NOT NULL,
+  message TEXT NULL,
+  source_page VARCHAR(150) DEFAULT 'book-demo.php',
+  referer VARCHAR(255) DEFAULT NULL,
+  user_agent VARCHAR(255) DEFAULT NULL,
+  ip_address VARCHAR(45) DEFAULT NULL,
+  status ENUM('new','scheduled','completed','cancelled') NOT NULL DEFAULT 'new',
+  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Seed example booking for testing
+INSERT INTO demo_bookings (name, phone, city, project_type, message, source_page, referer, user_agent, ip_address, status)
+VALUES ('Sample Lead', '+91 90000 11111', 'Delhi', 'home', 'Looking for a demo of smart locks.', 'book-demo.php', NULL, 'Seeder/1.0', '127.0.0.1', 'new')
+ON DUPLICATE KEY UPDATE name = VALUES(name);

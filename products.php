@@ -1,78 +1,64 @@
 <?php
-// products.php
+// Products listing page (uses shared site UI)
 
-// Site helpers (url/asset/esc/partial)
 require_once __DIR__ . '/core/helpers.php';
 
 /* ====== DB BOOTSTRAP (robust) ====== */
 $pdo = $pdo ?? null;
 
-/* 1) Try to include your admin config/db first */
+// Try to include admin DB if present
 $cfg = __DIR__ . '/admin/includes/config.php';
 $dbf = __DIR__ . '/admin/includes/db.php';
 if (is_file($cfg)) require_once $cfg;
 if (is_file($dbf)) require_once $dbf;
 
-/* 2) If $pdo already provided by admin code, use it */
-if ($pdo instanceof PDO) {
-  // ok
-} else {
-  /* 3) Collect credentials from common patterns */
-  $host = null;
-  $name = null;
-  $user = null;
-  $pass = null;
+// If still no PDO, try to construct one from common constants/vars
+if (!($pdo instanceof PDO)) {
+    $host = $name = $user = $pass = null;
 
-  // a) Constants
-  if (defined('DB_HOST')) $host = DB_HOST;
-  if (defined('DB_NAME')) $name = DB_NAME;
-  if (defined('DB_USER')) $user = DB_USER;
-  if (defined('DB_PASS')) $pass = DB_PASS;
+    if (defined('DB_HOST')) $host = DB_HOST;
+    if (defined('DB_NAME')) $name = DB_NAME;
+    if (defined('DB_USER')) $user = DB_USER;
+    if (defined('DB_PASS')) $pass = DB_PASS;
 
-  // b) Variables like $DB_HOST etc.
-  if (!$host && isset($DB_HOST)) $host = $DB_HOST;
-  if (!$name && isset($DB_NAME)) $name = $DB_NAME;
-  if (!$user && isset($DB_USER)) $user = $DB_USER;
-  if (!$pass && isset($DB_PASS)) $pass = $DB_PASS;
+    if (!$host && isset($DB_HOST)) $host = $DB_HOST;
+    if (!$name && isset($DB_NAME)) $name = $DB_NAME;
+    if (!$user && isset($DB_USER)) $user = $DB_USER;
+    if (!$pass && isset($DB_PASS)) $pass = $DB_PASS;
 
-  // c) Array config e.g. $config['db']['host']
-  if (isset($config['db'])) {
-    $host = $host ?: ($config['db']['host'] ?? null);
-    $name = $name ?: ($config['db']['name'] ?? null);
-    $user = $user ?: ($config['db']['user'] ?? null);
-    $pass = $pass ?: ($config['db']['pass'] ?? null);
-  }
-
-  // d) Fallback to typical local defaults if nothing found
-  $host = $host ?: '127.0.0.1';
-  $name = $name ?: 'iswift_db';
-  $user = $user ?: 'root';
-  $pass = $pass ?? '';
-
-  /* 4) Build PDO (last resort). If your admin exposes a helper like db(), use it */
-  if (!$pdo && function_exists('db')) {
-    $maybe = db(); // some projects return a PDO here
-    if ($maybe instanceof PDO) $pdo = $maybe;
-  }
-
-  if (!$pdo) {
-    try {
-      $dsn = "mysql:host={$host};dbname={$name};charset=utf8mb4";
-      $pdo = new PDO($dsn, $user, $pass, [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-      ]);
-    } catch (Throwable $e) {
-      http_response_code(500);
-      echo "DB connection failed.";
-      // Uncomment next line temporarily if you want the actual reason while debugging:
-      // echo "<pre>".$e->getMessage()."</pre>";
-      exit;
+    if (isset($config['db'])) {
+        $host = $host ?: ($config['db']['host'] ?? null);
+        $name = $name ?: ($config['db']['name'] ?? null);
+        $user = $user ?: ($config['db']['user'] ?? null);
+        $pass = $pass ?: ($config['db']['pass'] ?? null);
     }
-  }
+
+    // Fallback dev defaults
+    $host = $host ?: '127.0.0.1';
+    $name = $name ?: 'iswift_db';
+    $user = $user ?: 'root';
+    $pass = $pass ?? '';
+
+    if (!$pdo && function_exists('db')) {
+        $maybe = db();
+        if ($maybe instanceof PDO) $pdo = $maybe;
+    }
+
+    if (!$pdo) {
+        try {
+            $dsn = "mysql:host={$host};dbname={$name};charset=utf8mb4";
+            $pdo = new PDO($dsn, $user, $pass, [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            ]);
+        } catch (Throwable $e) {
+            http_response_code(500);
+            echo 'DB connection failed.';
+            exit;
+        }
+    }
 }
 /* ====== END DB BOOTSTRAP ====== */
-
 
 /* ====== INPUTS ====== */
 $q         = trim($_GET['q'] ?? '');
@@ -88,68 +74,64 @@ $per_page = in_array($per_page, [12, 24, 48], true) ? $per_page : 12;
 $offset   = ($page - 1) * $per_page;
 
 /* ====== QUERY BUILDER ====== */
-$where = ["p.status = 'published'"];
+$where  = ["p.status = 'published'"];
 $params = [];
 
 if ($q !== '') {
-  $where[] = "(p.name LIKE :q OR p.short_desc LIKE :q OR p.sku LIKE :q)";
-  $params[':q'] = "%{$q}%";
+    $where[] = "(p.name LIKE :q OR p.short_desc LIKE :q OR p.sku LIKE :q)";
+    $params[':q'] = "%{$q}%";
 }
 if ($min !== '' && is_numeric($min)) {
-  $where[] = "COALESCE(p.sale_price, p.price) >= :minp";
-  $params[':minp'] = (float)$min;
+    $where[] = "COALESCE(p.sale_price, p.price) >= :minp";
+    $params[':minp'] = (float)$min;
 }
 if ($max !== '' && is_numeric($max)) {
-  $where[] = "COALESCE(p.sale_price, p.price) <= :maxp";
-  $params[':maxp'] = (float)$max;
+    $where[] = "COALESCE(p.sale_price, p.price) <= :maxp";
+    $params[':maxp'] = (float)$max;
 }
 if ($on_sale) {
-  $where[] = "p.sale_price IS NOT NULL";
+    $where[] = "p.sale_price IS NOT NULL";
 }
 if ($in_stock) {
-  $where[] = "p.stock > 0";
+    $where[] = "p.stock > 0";
 }
 
-$order = "p.updated_at DESC";
+// Sort: use created_at (updated_at may not exist)
+$order = "p.created_at DESC";
 switch ($sort) {
-  case 'price_asc':
-    $order = "COALESCE(p.sale_price, p.price) ASC";
-    break;
-  case 'price_desc':
-    $order = "COALESCE(p.sale_price, p.price) DESC";
-    break;
-  case 'name_asc':
-    $order = "p.name ASC";
-    break;
-  case 'name_desc':
-    $order = "p.name DESC";
-    break;
-  case 'latest':
-  default:
-    $order = "p.updated_at DESC";
+    case 'price_asc':
+        $order = "COALESCE(p.sale_price, p.price) ASC";
+        break;
+    case 'price_desc':
+        $order = "COALESCE(p.sale_price, p.price) DESC";
+        break;
+    case 'name_asc':
+        $order = "p.name ASC";
+        break;
+    case 'name_desc':
+        $order = "p.name DESC";
+        break;
+    case 'latest':
+    default:
+        $order = "p.created_at DESC";
 }
 
-$wsql = $where ? ("WHERE " . implode(" AND ", $where)) : "";
+$wsql = $where ? ("WHERE " . implode(' AND ', $where)) : '';
 
-if (!($pdo instanceof PDO)) {
-    // Graceful fallback when DB is unavailable
-    $total = 0;
-    $pages = 1;
-    $rows  = [];
-} else {
-    /* ====== COUNT ====== */
-    $countSql = "SELECT COUNT(*) AS cnt
-                 FROM products p
-                 $wsql";
+/* ====== DATA ====== */
+$total = 0; $pages = 1; $rows = [];
+if ($pdo instanceof PDO) {
+    // Count
+    $countSql = "SELECT COUNT(*) AS cnt FROM products p $wsql";
     $stmt = $pdo->prepare($countSql);
     $stmt->execute($params);
     $total = (int)$stmt->fetchColumn();
     $pages = max(1, (int)ceil($total / $per_page));
 
-    /* ====== DATA: with primary image (fallback to any) ====== */
+    // Data with primary image, fallback to first image
     $sql = "
     SELECT
-      p.id, p.name, p.slug, p.sku, p.short_desc, p.price, p.sale_price, p.stock, p.updated_at,
+      p.id, p.name, p.slug, p.sku, p.short_desc, p.price, p.sale_price, p.stock,
       COALESCE(pim.path, pia.path) AS image_path
     FROM products p
     LEFT JOIN (
@@ -169,8 +151,8 @@ if (!($pdo instanceof PDO)) {
     ) pia ON pia.product_id = p.id
     $wsql
     ORDER BY $order
-    LIMIT :lim OFFSET :off
-    ";
+    LIMIT :lim OFFSET :off";
+
     $stmt = $pdo->prepare($sql);
     foreach ($params as $k => $v) $stmt->bindValue($k, $v);
     $stmt->bindValue(':lim', $per_page, PDO::PARAM_INT);
@@ -180,298 +162,67 @@ if (!($pdo instanceof PDO)) {
 }
 
 /* ====== HELPERS ====== */
-function h($s)
-{
-  return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8');
+function h($s) { return htmlspecialchars((string)$s, ENT_QUOTES, 'UTF-8'); }
+function price_html($price, $sale) {
+    if ($sale !== null && $sale !== '' && (float)$sale > 0 && (float)$sale < (float)$price) {
+        return '<span style="font-weight:600;">₹' . number_format((float)$sale) . '</span> <del style="opacity:.6;">₹' . number_format((float)$price) . '</del>';
+    }
+    return '₹' . number_format((float)$price);
 }
-function price_html($price, $sale)
-{
-  if ($sale !== null && $sale !== '' && (float)$sale > 0 && (float)$sale < (float)$price) {
-    return '<span style="font-weight:600;">₹' . number_format((float)$sale) . '</span> <del style="opacity:.6;">₹' . number_format((float)$price) . '</del>';
-  }
-  return '₹' . number_format((float)$price);
+function img_url($path) {
+    $path = trim((string)$path);
+    if ($path !== '') {
+        return url('uploads/products/' . ltrim($path, '/'));
+    }
+    return 'https://via.placeholder.com/600x400.png?text=Product';
 }
-function img_url($path)
-{
-  $path = trim((string)$path);
-  if ($path !== '') {
-    // Adjust the base path if your images live elsewhere
-    return '/uploads/products/' . ltrim($path, '/');
-  }
-  // Brand-friendly placeholder
-  return 'https://via.placeholder.com/600x400.png?text=Omvix+Product';
+function qp($overrides = []) {
+    $qs = array_merge($_GET, $overrides);
+    return '?' . http_build_query($qs);
 }
 
-// Preserve query params for pagination/sort
-function qp($overrides = [])
-{
-  $qs = array_merge($_GET, $overrides);
-  return '?' . http_build_query($qs);
-}
+/* ====== META & HEADER ====== */
+$meta_title = 'Products — iSwift';
+$meta_desc  = 'Browse smart home devices including locks, doorbells, mesh Wi‑Fi and more.';
+$current_page = 'products';
+partial('header', compact('meta_title', 'meta_desc', 'current_page'));
 ?>
-<!DOCTYPE html>
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-  <title>Products | Omvix</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Inter font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg-light: #FFF8F0;
-      --accent-orange: #FF6F40;
-      --accent-red: #E25822;
-      --accent-yellow: #FFD447;
-      --btn-bg: #FFB347;
-      --btn-text: #3B1F0F;
-      --text-main: #1A1A1A;
-      --text-muted: #5A4033;
-      --card-bg: #FFF1E5;
-      --shadow-tint: rgba(255, 111, 64, 0.2);
-      --font-family: 'Inter', sans-serif;
-    }
+<main class="container" style="padding: 2rem 0;">
+    <h1 style="margin-bottom:0.25rem; color: var(--color-accent);">Products</h1>
+    <p style="color: var(--color-muted); margin-bottom: 1rem;">Explore our range of smart home devices and components.</p>
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      background: var(--bg-light);
-      color: var(--text-main);
-      font-family: var(--font-family);
-      line-height: 1.5;
-    }
-
-    header,
-    footer {
-      background: var(--bg-light);
-      padding: 24px 48px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-
-    header nav a {
-      color: var(--accent-red);
-      margin-left: 24px;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    header nav a:hover {
-      color: var(--accent-orange);
-    }
-
-    .container {
-      max-width: 1280px;
-      margin: auto;
-      padding: 48px 24px;
-    }
-
-    h1 {
-      font-size: 40px;
-      font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .muted {
-      color: var(--text-muted);
-    }
-
-    .filters {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 4px 20px var(--shadow-tint);
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 12px;
-      align-items: end;
-      margin-top: 16px;
-    }
-
-    label {
-      display: block;
-      font-size: 14px;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select {
-      width: 100%;
-      padding: 10px 12px;
-      border-radius: 8px;
-      border: 1px solid var(--accent-orange);
-      background: transparent;
-      color: var(--text-muted);
-    }
-
-    .btn {
-      background: var(--btn-bg);
-      color: var(--btn-text);
-      padding: 12px 20px;
-      border-radius: 12px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      transition: all .3s ease;
-    }
-
-    .btn:hover {
-      filter: brightness(110%);
-      transform: scale(1.02);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 24px;
-      margin-top: 24px;
-    }
-
-    .card {
-      background: var(--card-bg);
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 4px 20px var(--shadow-tint);
-      transition: transform .3s ease, box-shadow .3s ease;
-    }
-
-    .card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 24px rgba(255, 111, 64, .3);
-    }
-
-    .card img {
-      width: 100%;
-      border-radius: 16px;
-      margin-bottom: 12px;
-      display: block;
-    }
-
-    .price {
-      font-size: 18px;
-      margin-top: 4px;
-    }
-
-    .sku {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    .stock-ok {
-      font-size: 13px;
-      color: #0f7a3d;
-      font-weight: 600;
-    }
-
-    .stock-out {
-      font-size: 13px;
-      color: #b00020;
-      font-weight: 600;
-    }
-
-    .toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 16px;
-      gap: 16px;
-      flex-wrap: wrap;
-    }
-
-    .pill {
-      background: #FFEAD8;
-      color: var(--accent-red);
-      padding: 6px 10px;
-      border-radius: 999px;
-      font-size: 13px;
-    }
-
-    .pagination {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      justify-content: center;
-      margin: 24px 0;
-      flex-wrap: wrap;
-    }
-
-    .pagination a,
-    .pagination span {
-      padding: 8px 12px;
-      border: 1px solid var(--accent-orange);
-      border-radius: 8px;
-      text-decoration: none;
-      color: var(--accent-red);
-      font-weight: 600;
-    }
-
-    .pagination .active {
-      background: var(--accent-orange);
-      color: #fff;
-      border-color: var(--accent-orange);
-    }
-
-    .tag {
-      font-size: 12px;
-      background: #fff;
-      border: 1px dashed var(--accent-orange);
-      padding: 4px 8px;
-      border-radius: 999px;
-      margin-left: 8px;
-    }
-  </style>
-</head>
-
-<body>
-  <header>
-    <a href="/"><strong>iSwift</strong></a>
-    <nav>
-      <a href="/">Home</a>
-      <a href="<?= h(basename(__FILE__)) ?>">Products</a>
-      <a href="#">Contact</a>
-      <a class="btn" href="#">Book Demo</a>
-    </nav>
-  </header>
-
-  <main class="container">
-    <h1>Products</h1>
-    <div class="toolbar">
-      <div class="muted"><?= $total ?> result<?= $total === 1 ? '' : 's' ?> found</div>
+    <div class="toolbar" style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap;">
+      <div style="color: var(--color-muted);">
+        <?= $total ?> result<?= $total === 1 ? '' : 's' ?> found
+      </div>
       <div>
-        <span class="pill">Sort:</span>
-        <a class="tag" href="<?= h(qp(['sort' => 'latest', 'page' => 1])) ?>">Latest</a>
-        <a class="tag" href="<?= h(qp(['sort' => 'price_asc', 'page' => 1])) ?>">Price ↑</a>
-        <a class="tag" href="<?= h(qp(['sort' => 'price_desc', 'page' => 1])) ?>">Price ↓</a>
-        <a class="tag" href="<?= h(qp(['sort' => 'name_asc', 'page' => 1])) ?>">A–Z</a>
-        <a class="tag" href="<?= h(qp(['sort' => 'name_desc', 'page' => 1])) ?>">Z–A</a>
+        <span style="font-size:0.875rem; color: var(--color-muted);">Sort:</span>
+        <a class="btn" href="<?= h(qp(['sort' => 'latest', 'page' => 1])) ?>" style="margin-left:0.5rem;">Latest</a>
+        <a class="btn" href="<?= h(qp(['sort' => 'price_asc', 'page' => 1])) ?>">Price Low→High</a>
+        <a class="btn" href="<?= h(qp(['sort' => 'price_desc', 'page' => 1])) ?>">Price High→Low</a>
+        <a class="btn" href="<?= h(qp(['sort' => 'name_asc', 'page' => 1])) ?>">Name A–Z</a>
+        <a class="btn" href="<?= h(qp(['sort' => 'name_desc', 'page' => 1])) ?>">Name Z–A</a>
       </div>
     </div>
 
-    <form class="filters" method="get" action="">
+    <!-- Filters -->
+    <form method="get" action="" style="margin-top:1rem; background: var(--color-light); padding:1rem; border:1px solid #eaeaea; border-radius:8px; display:grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap:0.75rem; align-items:end;">
       <div>
-        <label for="q">Search</label>
-        <input type="text" id="q" name="q" value="<?= h($q) ?>" placeholder="Name, SKU, description">
+        <label for="q" style="display:block; font-size:0.875rem; color:var(--color-muted);">Search</label>
+        <input type="text" id="q" name="q" value="<?= h($q) ?>" placeholder="Name, SKU, description" style="width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
       </div>
       <div>
-        <label for="min">Min Price (₹)</label>
-        <input type="number" id="min" name="min" min="0" step="100" value="<?= h($min) ?>">
+        <label for="min" style="display:block; font-size:0.875rem; color:var(--color-muted);">Min Price (₹)</label>
+        <input type="number" id="min" name="min" min="0" step="100" value="<?= h($min) ?>" style="width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
       </div>
       <div>
-        <label for="max">Max Price (₹)</label>
-        <input type="number" id="max" name="max" min="0" step="100" value="<?= h($max) ?>">
+        <label for="max" style="display:block; font-size:0.875rem; color:var(--color-muted);">Max Price (₹)</label>
+        <input type="number" id="max" name="max" min="0" step="100" value="<?= h($max) ?>" style="width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
       </div>
       <div>
-        <label for="sort">Sort by</label>
-        <select id="sort" name="sort">
+        <label for="sort" style="display:block; font-size:0.875rem; color:var(--color-muted);">Sort by</label>
+        <select id="sort" name="sort" style="width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
           <option value="latest" <?= $sort === 'latest' ? 'selected' : '' ?>>Latest</option>
           <option value="price_asc" <?= $sort === 'price_asc' ? 'selected' : '' ?>>Price: Low to High</option>
           <option value="price_desc" <?= $sort === 'price_desc' ? 'selected' : '' ?>>Price: High to Low</option>
@@ -480,81 +231,79 @@ function qp($overrides = [])
         </select>
       </div>
       <div>
-        <label for="per_page">Per page</label>
-        <select id="per_page" name="per_page">
-          <option value="12" <?= $per_page === 12 ? 'selected' : '' ?>>12</option>
-          <option value="24" <?= $per_page === 24 ? 'selected' : '' ?>>24</option>
-          <option value="48" <?= $per_page === 48 ? 'selected' : '' ?>>48</option>
+        <label for="per_page" style="display:block; font-size:0.875rem; color:var(--color-muted);">Per page</label>
+        <select id="per_page" name="per_page" style="width:100%; padding:0.5rem; border:1px solid #ccc; border-radius:4px;">
+          <?php foreach ([12, 24, 48] as $n): ?>
+            <option value="<?= $n ?>" <?= $per_page === $n ? 'selected' : '' ?>><?= $n ?></option>
+          <?php endforeach; ?>
         </select>
       </div>
       <div style="display:flex; gap:12px; align-items:center;">
         <div>
           <input type="checkbox" id="on_sale" name="on_sale" <?= $on_sale ? 'checked' : '' ?>>
-          <label for="on_sale">On Sale</label>
+          <label for="on_sale" style="font-size:0.875rem; color:var(--color-muted);">On Sale</label>
         </div>
         <div>
           <input type="checkbox" id="in_stock" name="in_stock" <?= $in_stock ? 'checked' : '' ?>>
-          <label for="in_stock">In Stock</label>
+          <label for="in_stock" style="font-size:0.875rem; color:var(--color-muted);">In Stock</label>
         </div>
       </div>
       <div>
-        <button class="btn" type="submit">Apply</button>
-        <a class="btn" href="<?= h(basename(__FILE__)) ?>" style="margin-left:8px;">Reset</a>
+        <button class="btn btn-primary" type="submit">Apply</button>
+        <a class="btn btn-secondary" href="<?= url('products.php') ?>" style="margin-left:8px;">Reset</a>
       </div>
     </form>
 
-    <section class="grid">
+    <!-- Products grid -->
+    <section style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap:1.5rem; margin-top:1.5rem;">
       <?php if (!$rows): ?>
-        <p class="muted">No products match your filters.</p>
+        <p style="color: var(--color-muted);">No products match your filters.</p>
       <?php else: ?>
         <?php foreach ($rows as $r): ?>
-          <article class="card">
-            <a href="/iswift/product-details.php?slug=<?= h($r['slug']) ?>">
-              <img src="<?= h(img_url($r['image_path'])) ?>" alt="<?= h($r['name']) ?>" loading="lazy">
-              <h3 style="font-size:22px; font-weight:600;"><?= h($r['name']) ?></h3>
+          <article style="background: var(--color-light); border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 1rem;">
+            <a href="<?= url('product-details.php?slug=' . urlencode($r['slug'])) ?>">
+              <img src="<?= h(img_url($r['image_path'])) ?>" alt="<?= h($r['name']) ?>" loading="lazy" style="width:100%; border-radius:6px; margin-bottom:0.75rem;">
+              <h3 style="font-size:1.125rem; font-weight:600; color: var(--color-accent);"><?= h($r['name']) ?></h3>
             </a>
-            <div class="sku">SKU: <?= h($r['sku']) ?></div>
-            <p class="muted" style="margin-top:8px;"><?= h($r['short_desc']) ?></p>
-            <div class="price"><?= price_html($r['price'], $r['sale_price']); ?></div>
+            <div style="font-size:0.875rem; color: var(--color-muted);">SKU: <?= h($r['sku']) ?></div>
+            <p style="margin-top:8px; color: var(--color-muted);"><?= h($r['short_desc']) ?></p>
+            <div style="color: var(--color-accent); font-weight:600;"><?= price_html($r['price'], $r['sale_price']); ?></div>
             <div style="margin-top:6px;">
-              <?= ($r['stock'] > 0) ? '<span class="stock-ok">In stock</span>' : '<span class="stock-out">Out of stock</span>'; ?>
+              <?= ($r['stock'] > 0) ? '<span style="font-size:0.875rem; color:#0f7a3d; font-weight:600;">In stock</span>' : '<span style="font-size:0.875rem; color:#b00020; font-weight:600;">Out of stock</span>'; ?>
             </div>
             <div style="margin-top:12px;">
-              <a class="btn" href="/iswift/product-details.php?slug=<?= h($r['slug']) ?>">View Details</a>
+              <a class="btn btn-secondary" href="<?= url('product-details.php?slug=' . urlencode($r['slug'])) ?>">View Details</a>
             </div>
           </article>
         <?php endforeach; ?>
       <?php endif; ?>
     </section>
 
+    <!-- Pagination -->
     <?php if ($pages > 1): ?>
-      <nav class="pagination" aria-label="Pagination">
+      <nav aria-label="Pagination" style="margin-top:1.5rem;">
         <?php
         $start = max(1, $page - 2);
         $end   = min($pages, $page + 2);
         if ($page > 1) {
-          echo '<a href="' . h(qp(['page' => 1])) . '">« First</a>';
-          echo '<a href="' . h(qp(['page' => $page - 1])) . '">‹ Prev</a>';
+          echo '<a class="btn" href="' . h(qp(['page' => 1])) . '">First</a>';
+          echo ' <a class="btn" href="' . h(qp(['page' => $page - 1])) . '">Prev</a>';
         }
         for ($p = $start; $p <= $end; $p++) {
           if ($p == $page) {
-            echo '<span class="active">' . $p . '</span>';
+            echo ' <span class="btn btn-secondary">' . $p . '</span>';
           } else {
-            echo '<a href="' . h(qp(['page' => $p])) . '">' . $p . '</a>';
+            echo ' <a class="btn" href="' . h(qp(['page' => $p])) . '">' . $p . '</a>';
           }
         }
         if ($page < $pages) {
-          echo '<a href="' . h(qp(['page' => $page + 1])) . '">Next ›</a>';
-          echo '<a href="' . h(qp(['page' => $pages])) . '">Last »</a>';
+          echo ' <a class="btn" href="' . h(qp(['page' => $page + 1])) . '">Next</a>';
+          echo ' <a class="btn" href="' . h(qp(['page' => $pages])) . '">Last</a>';
         }
         ?>
       </nav>
     <?php endif; ?>
-  </main>
+</main>
 
-  <footer>
-    <p style="width:100%; text-align:center; color:var(--text-muted); padding-top:24px;">© <?= date('Y') ?> Omvix. All rights reserved.</p>
-  </footer>
-</body>
+<?php partial('footer'); ?>
 
-</html>
