@@ -44,7 +44,7 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
     <meta charset="utf-8">
     <title>Admin · Products</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= $BASE_URL ?>admin/assets/style.css">
+    <link rel="stylesheet" href="<?= $BASE_URL ?>assets/style.css">
 </head>
 
 <body class="sidebar-layout">
@@ -221,7 +221,7 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
     </div>
 </div>
 
-<script src="<?= $BASE_URL ?>admin/assets/nav.js"></script>
+<script src="<?= $BASE_URL ?>assets/nav.js"></script>
 
 </body>
 </html>
