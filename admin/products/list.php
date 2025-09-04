@@ -42,9 +42,9 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
 
 <head>
     <meta charset="utf-8">
-    <title>Admin · Products</title>
+    <title>Admin Â· Products</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="<?= $BASE_URL ?>assets/style.css">
+    <link rel="stylesheet" href="<?= $BASE_URL ?>admin/assets/style.css">
 </head>
 
 <body class="sidebar-layout">
@@ -71,7 +71,7 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
             'sale_price' => 'sale_price',
             'stock' => 'stock',
             'status' => 'status',
-            'updated_at' => 'updated_at',
+            'updated_at' => 'created_at',
             'created_at' => 'created_at',
         ];
         $orderBy = $sortable[$sort] ?? 'updated_at';
@@ -102,7 +102,7 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
 
         // 5) Fetch rows
         $sql = "
-  SELECT id, name, slug, sku, price, sale_price, status, stock, updated_at
+  SELECT id, name, slug, sku, price, sale_price, status, stock, created_at AS updated_at
   FROM products
   $whereSql
   ORDER BY $orderBy $dir
@@ -159,7 +159,7 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
                     $cur = $_GET['sort'] ?? 'updated_at';
                     $dir = strtolower($_GET['dir'] ?? 'desc') === 'asc' ? 'asc' : 'desc';
                     $next = ($cur === $key && $dir === 'asc') ? 'desc' : 'asc';
-                    $arrow = $cur === $key ? ($dir === 'asc' ? '▲' : '▼') : '';
+                    $arrow = $cur === $key ? ($dir === 'asc' ? 'â–²' : 'â–¼') : '';
                     $href = 'list.php' . keep(['sort' => $key, 'dir' => $next, 'page' => 1]);
                     echo "<th><a href=\"$href\">$label $arrow</a></th>";
                 }
@@ -188,15 +188,15 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
                                 <span class="muted">/<?= htmlspecialchars($r['slug']) ?></span>
                             </td>
                             <td><?= htmlspecialchars($r['sku'] ?? '') ?></td>
-                            <td>₹<?= number_format((float)$r['price'], 2) ?></td>
-                            <td><?= is_null($r['sale_price']) ? '—' : '₹' . number_format((float)$r['sale_price'], 2) ?></td>
+                            <td>â‚¹<?= number_format((float)$r['price'], 2) ?></td>
+                            <td><?= is_null($r['sale_price']) ? 'â€”' : 'â‚¹' . number_format((float)$r['sale_price'], 2) ?></td>
                             <td><?= (int)$r['stock'] ?></td>
                             <td><span class="badge"><?= htmlspecialchars($r['status']) ?></span></td>
                             <td><span class="muted"><?= htmlspecialchars($r['updated_at']) ?></span></td>
                             <td>
                                 <a href="edit.php?slug=<?= urldecode($r['slug']) ?>">Edit</a>
                                 <!-- You can add a View link for the public page if you want: -->
-                                <!-- <span class="muted">·</span> <a href="<?= $BASE_URL ?>product-details.php?slug=<?= urlencode($r['slug']) ?>" target="_blank">View</a> -->
+                                <!-- <span class="muted">Â·</span> <a href="<?= $BASE_URL ?>product-details.php?slug=<?= urlencode($r['slug']) ?>" target="_blank">View</a> -->
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -210,9 +210,9 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
                 <?php
                 $prev = max(1, $page - 1);
                 $next = min($pages, $page + 1);
-                if ($page > 1) echo '<a href="list.php' . keep(['page' => 1]) . '">« First</a><a href="list.php' . keep(['page' => $prev]) . '">‹ Prev</a>';
+                if ($page > 1) echo '<a href="list.php' . keep(['page' => 1]) . '">Â« First</a><a href="list.php' . keep(['page' => $prev]) . '">â€¹ Prev</a>';
                 echo '<span class="current">Page ' . $page . ' / ' . $pages . '</span>';
-                if ($page < $pages) echo '<a href="list.php' . keep(['page' => $next]) . '">Next ›</a><a href="list.php' . keep(['page' => $pages]) . '">Last »</a>';
+                if ($page < $pages) echo '<a href="list.php' . keep(['page' => $next]) . '">Next â€º</a><a href="list.php' . keep(['page' => $pages]) . '">Last Â»</a>';
                 ?>
             </div>
         <?php endif; ?>
@@ -223,5 +223,6 @@ if (!isset($pdo) || !($pdo instanceof PDO)) {
 
 <script src="<?= $BASE_URL ?>assets/nav.js"></script>
 
+<script src="<?= $BASE_URL ?>admin/assets/nav.js"></script>
 </body>
 </html>

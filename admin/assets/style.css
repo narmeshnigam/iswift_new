@@ -413,7 +413,7 @@ body.login-page{
 
 /* Ensure a sane default width variable */
 :root{
-  --sidebar-w: 280px; /* adjust if your current CSS uses another width */
+  --sidebar-w: 300px; /* widen a bit for spacing */
 }
 
 /* Base layout for pages using the sidebar */
@@ -425,7 +425,9 @@ body.login-page{
 
 /* Main content wrapper (use this class on pages' main area) */
 .sidebar-layout .main-content{
-  padding: 20px;
+  padding: 32px; /* more breathing room */
+  max-width: 1200px; /* contain width like public site */
+  margin: 0 auto;    /* center content */
   transition: margin-left .25s ease, padding .2s ease;
 }
 

@@ -35,7 +35,7 @@ if (!($pdo instanceof PDO)) {
 
     // Fallback dev defaults
     $host = $host ?: '127.0.0.1';
-    $name = $name ?: 'iswift_db';
+  $name = $name ?: 'iswift';
     $user = $user ?: 'root';
     $pass = $pass ?? '';
 
@@ -306,4 +306,3 @@ partial('header', compact('meta_title', 'meta_desc', 'current_page'));
 </main>
 
 <?php partial('footer'); ?>
-

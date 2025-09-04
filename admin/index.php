@@ -16,7 +16,7 @@ if (isset($_SESSION['user_id'])) {
   <title>Login – iSwift ERP</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <!-- Scoped login stylesheet -->
-  <link rel="stylesheet" href="<?= $BASE_URL ?>assets/style.css">
+  <link rel="stylesheet" href="<?= $BASE_URL ?>admin/assets/style.css">
 </head>
 <body class="login-page">
   <main class="auth-container">

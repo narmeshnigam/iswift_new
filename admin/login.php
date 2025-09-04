@@ -36,7 +36,20 @@ try {
     $stmt = $pdo->prepare('SELECT id, name, role, password FROM users WHERE email = ? LIMIT 1');
     $stmt->execute([$email]);
     $user = $stmt->fetch();
-    if ($user && password_verify($password, $user['password'])) {
+    $ok = false;
+    if ($user) {
+        $stored = (string)$user['password'];
+        // Plain-text login (preferred per no-hashing rule)
+        if ($stored === $password) {
+            $ok = true;
+        } else {
+            // Backward-compatible: accept legacy hashed passwords
+            if (str_starts_with($stored, '$2') || str_starts_with($stored, '$argon2')) {
+                $ok = password_verify($password, $stored);
+            }
+        }
+    }
+    if ($ok) {
         // Regenerate session ID to prevent fixation
         session_regenerate_id(true);
         $_SESSION['user_id']   = $user['id'];

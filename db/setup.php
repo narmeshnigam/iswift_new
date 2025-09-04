@@ -148,10 +148,20 @@ try {
         if ($cnt === 0) {
             $name = 'Administrator';
             $email = 'admin@iswift.local';
-            $hash = password_hash('admin123', PASSWORD_BCRYPT);
+            $plain = 'admin123';
             $ins = $pdo->prepare('INSERT INTO users (name, email, password, role) VALUES (:n,:e,:p,\'admin\')');
-            $ins->execute([':n' => $name, ':e' => $email, ':p' => $hash]);
-            out('Seeded default admin: ' . $email . ' / admin123');
+            $ins->execute([':n' => $name, ':e' => $email, ':p' => $plain]);
+            out('Seeded default admin (plain password): ' . $email . ' / admin123');
+        }
+
+        // Ensure requested admin user exists
+        $email2 = 'narmesh@iswift.in';
+        $exists = (int)$pdo->query("SELECT COUNT(*) FROM users WHERE email = 'narmesh@iswift.in'")->fetchColumn();
+        if ($exists === 0) {
+            $plain2 = 'admin123';
+            $ins2 = $pdo->prepare('INSERT INTO users (name, email, password, role) VALUES (:n,:e,:p,\'admin\')');
+            $ins2->execute([':n' => 'Narmesh', ':e' => $email2, ':p' => $plain2]);
+            out('Seeded admin user (plain password): ' . $email2);
         }
     } catch (Throwable $e) {
         // Ignore if table not present or other non-critical issues

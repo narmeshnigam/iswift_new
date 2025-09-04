@@ -10,6 +10,12 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Seed admin user (requested)
+INSERT INTO users (name, email, password, role)
+VALUES ('Narmesh', 'narmesh@iswift.in', 'admin123', 'admin')
+ON DUPLICATE KEY UPDATE name = VALUES(name);
+-- The password hash above corresponds to 'admin123' (bcrypt)
+
 -- Categories
 CREATE TABLE IF NOT EXISTS categories (
   id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,

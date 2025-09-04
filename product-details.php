@@ -11,7 +11,7 @@ if (is_file($cfg)) require_once $cfg;
 if (is_file($dbf)) require_once $dbf;
 if (!($pdo instanceof PDO)) {
     $host = defined('DB_HOST') ? DB_HOST : ($DB_HOST ?? ($config['db']['host'] ?? '127.0.0.1'));
-    $name = defined('DB_NAME') ? DB_NAME : ($DB_NAME ?? ($config['db']['name'] ?? 'iswift_db'));
+  $name = defined('DB_NAME') ? DB_NAME : ($DB_NAME ?? ($config['db']['name'] ?? 'iswift'));
     $user = defined('DB_USER') ? DB_USER : ($DB_USER ?? ($config['db']['user'] ?? 'root'));
     $pass = defined('DB_PASS') ? DB_PASS : ($DB_PASS ?? ($config['db']['pass'] ?? ''));
     if (!$pdo && function_exists('db')) {
@@ -178,4 +178,3 @@ partial('header', compact('meta_title', 'meta_desc', 'current_page'));
 </main>
 
 <?php partial('footer'); ?>
-

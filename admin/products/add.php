@@ -220,7 +220,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   <meta charset="utf-8">
   <title>Admin · Add Product</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="<?= $BASE_URL ?>assets/style.css">
+  <link rel="stylesheet" href="<?= $BASE_URL ?>admin/assets/style.css">
 </head>
 <body class="sidebar-layout">
 <?php include __DIR__ . '/../includes/nav.php'; ?>
@@ -431,5 +431,7 @@ function addFaq(){
   box.appendChild(div);
 }
 </script>
+<script src="<?= $BASE_URL ?>admin/assets/nav.js"></script>
 </body>
 </html>
+

@@ -29,7 +29,7 @@ if (!defined('DB_HOST')) {
     define('DB_HOST', $isLocal ? 'localhost' : 'localhost');
 }
 if (!defined('DB_NAME')) {
-    // Use a sensible default DB name for local development
+    // Default local DB name aligned with existing scripts
     define('DB_NAME', $isLocal ? 'iswift' : 'u348991914_iswift');
 }
 if (!defined('DB_USER')) {
