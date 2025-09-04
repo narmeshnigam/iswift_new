@@ -1,112 +1,12 @@
 <?php
-// index.php — iSwift Home Page (theme-polished, header/footer untouched)
-// ---------------------------------------------------------------------
-// • Keeps your existing HEADER and FOOTER exactly as they are.
-// • Injects page-specific CSS (iSwift Jupiter+Mercury palette) inside <main> only.
-// • Uses real, direct image URLs (Wikimedia Commons) + visible source credits.
-// • Content matches the earlier “good content page” you approved.
-
+// index.php — iSwift Home Page (header/footer untouched, external CSS only)
+// Requires: /assets/css/iswift-theme.css (load after your existing CSS)
 ?>
 <?php if (file_exists(__DIR__ . '/header.php')) { include __DIR__ . '/header.php'; } ?>
-<main id="main" class="site-main" style="position:relative; z-index:0">
-  <style>
-    /* iSwift Numerology Theme (Jupiter + Mercury) — page-local overrides only */
-    :root{
-      --green:#2FBF71;   /* Mercury primary */
-      --yellow:#FFD54F;  /* Jupiter primary */
-      --sky:#64B5F6;     /* Mercury secondary */
-      --saffron:#F4B400; /* Jupiter secondary */
 
-      --surface:#FCFCF8; /* Card/overlay */
-      --text:#1F2937;    /* Body/headings */
-      --muted:#374151;   /* Secondary text */
-      --border:#E5E7EB;  /* Lines */
+<link rel="stylesheet" href="/assets/css/iswift-theme.css">
 
-      --bg-start:#FFF6E0;/* Page background gradient */
-      --bg-end:#F0FFF4;
-
-      --radius-lg:16px;
-      --radius-md:12px;
-      --shadow:0 10px 30px rgba(0,0,0,.06);
-
-      --text-on-yellow:#3B2F00;
-    }
-
-    /* Base (scoped to main so header/footer remain unchanged) */
-    .site-main{
-      color:var(--text);
-      background:linear-gradient(180deg,var(--bg-start),var(--bg-end));
-      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
-      font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
-    }
-    .site-main a{ color:var(--sky); text-decoration:none }
-    .site-main a:hover{ text-decoration:underline }
-    .muted{ color:var(--muted) !important }
-
-    /* Containers & sections */
-    .container{ max-width:1200px; margin-inline:auto; padding-inline:16px }
-    section{ padding-block:clamp(24px,6vw,64px); border-top:1px solid rgba(229,231,235,.6) }
-    .section-title{ color:var(--saffron); margin:0 0 12px; font-weight:700 }
-
-    /* Grid helpers */
-    .grid{ display:grid; gap:clamp(16px,2.5vw,28px) }
-
-    /* Buttons (non-destructive) */
-    .btn{ display:inline-flex; align-items:center; gap:8px; border:none;
-          border-radius:var(--radius-md); padding:12px 18px; font-weight:700;
-          cursor:pointer; transition:transform .15s ease, filter .15s ease, box-shadow .15s ease; text-decoration:none }
-    .btn:hover{ transform:translateY(-1px); filter:brightness(.98) }
-    .btn-primary{ color:#fff !important; background:linear-gradient(135deg,var(--green), #6EE7A8); box-shadow:0 8px 20px rgba(47,191,113,.25) }
-    .btn-ghost{ color:var(--text) !important; background:#fff; border:1px solid var(--border) }
-    .btn-secondary{ color:var(--text-on-yellow) !important; background:linear-gradient(135deg,var(--yellow), var(--saffron)); box-shadow:0 8px 20px rgba(244,180,0,.25) }
-
-    /* Cards */
-    .card{ background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg);
-           overflow:hidden; box-shadow:var(--shadow) }
-    .card img{ display:block; width:100%; height:auto; border-radius:12px }
-
-    /* Media figure with caption */
-    figure.media{ margin:0; border-radius:16px; overflow:hidden; background:#fff; border:1px solid var(--border) }
-    figure.media img{ display:block; width:100%; height:auto }
-    figure.media figcaption{ font-size:.8rem; color:var(--muted); padding:.5rem .75rem; border-top:1px solid var(--border); background:#fff }
-    figure.media figcaption a{ color:var(--muted) }
-
-    /* Eyebrow, headlines, sub */
-    .eyebrow{ letter-spacing:.12em; text-transform:uppercase; color:var(--muted); font-weight:700; font-size:.78rem }
-    .headline{ font-size:clamp(1.8rem,3.2vw,3rem); line-height:1.15; margin:.35rem 0 1rem }
-    .sub{ color:var(--muted); font-size:clamp(.98rem,1.2vw,1.08rem) }
-
-    /* Hero */
-    .hero{ background:
-             radial-gradient(900px 220px at 10% -40%, rgba(100,181,246,.18), transparent),
-             linear-gradient(90deg,var(--bg-start), var(--bg-end)) }
-    .hero-wrap{ grid-template-columns:1.1fr .9fr; align-items:center }
-    @media (max-width:960px){ .hero-wrap{ grid-template-columns:1fr } }
-
-    /* Services */
-    .cards{ grid-template-columns:repeat(auto-fit, minmax(240px,1fr)) }
-    .pill{ display:inline-block; margin:.9rem .9rem 0; font-size:.72rem; color:#245f3e; background:#eaf8f1;
-           padding:.35rem .6rem; border-radius:999px; border:1px solid rgba(47,191,113,.25) }
-    .card h3{ margin:.4rem .9rem .35rem; font-size:1.15rem }
-    .card p{ margin:.1rem .9rem 1rem; color:var(--muted) }
-
-    /* Steps */
-    .steps{ counter-reset:step }
-    .step{ background:#fff; border:1px solid var(--border); border-radius:14px; padding:1rem }
-    .step h4{ margin:.2rem 0 .2rem }
-    .step:before{
-      counter-increment:step; content:counter(step); display:inline-grid; place-items:center;
-      width:28px; height:28px; border-radius:8px; background:var(--sky); color:#fff; font-weight:700; margin-right:.6rem
-    }
-
-    /* CTA */
-    .cta{ background:linear-gradient(180deg, rgba(255,213,79,.18), transparent 65%) }
-    .cta-box{ background:#fff; border:1px dashed var(--saffron); border-radius:16px; padding:clamp(18px,2.5vw,26px) }
-
-    /* Brand stripe */
-    .brand-stripe{ height:3px; background:linear-gradient(90deg, transparent, var(--green), var(--yellow), var(--sky), transparent); border-radius:3px }
-  </style>
-
+<main id="main" class="site-main">
   <!-- HERO -->
   <section class="hero">
     <div class="container grid hero-wrap">
@@ -251,9 +151,9 @@
         <h2 class="section-title" style="font-size:clamp(1.4rem,2.2vw,1.9rem)">Reliability by design</h2>
         <p class="sub">Behind the scenes, we balance wireless convenience with hard-wired reliability where it matters.</p>
         <ul class="sub" style="margin:0; padding-left:1rem; line-height:1.65">
-          <li>Secure device onboarding & network isolation</li>
+          <li>Secure device onboarding &amp; network isolation</li>
           <li>Battery backups and surge protection</li>
-          <li>Labelled circuits & documentation for easy service</li>
+          <li>Labelled circuits &amp; documentation for easy service</li>
         </ul>
       </div>
     </div>
@@ -284,4 +184,5 @@
     </div>
   </section>
 </main>
+
 <?php if (file_exists(__DIR__ . '/footer.php')) { include __DIR__ . '/footer.php'; } ?>
